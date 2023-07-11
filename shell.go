@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
-	"path/filepath"
 	"strings"
 )
 
@@ -21,14 +20,16 @@ const (
 )
 
 func DirPath() (string, error) {
-	currentUser, err := user.Current()
+	dir, err := os.Getwd()
 	if err != nil {
-		log.Fatal("Error ", err)
+		log.Fatal("Error getting directory path: ", err)
 	}
-	desktopPath := filepath.Join(currentUser.HomeDir, "Desktop")
-	golangPath := filepath.Join(desktopPath, "golang")
+	prefix := "C:\\Users\\yyyy\\"
 
-	return golangPath, err
+	// Remove the prefix from the path
+	trimmedPath := strings.TrimPrefix(dir, prefix)
+
+	return trimmedPath, err
 }
 
 func sysDetail() (string, string, error) {
@@ -73,9 +74,9 @@ func main() {
 	for {
 
 		fmt.Println()
-		fmt.Printf(green+"%s@%s "+Purple+"Hamsel ", hostname, username)
+		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY ", hostname, username)
 		fmt.Print(reset + "$")
-		fmt.Printf(reset)
+		// fmt.Printf(reset)
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
