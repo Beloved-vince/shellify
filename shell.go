@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+
+	// "golang/package"
 	"log"
 	"os"
 	"os/exec"
@@ -27,7 +29,7 @@ func DirPath() (string, error) {
 	if err != nil {
 		log.Fatal("Error getting directory path: ", err)
 	}
-	prefix := "C:\\Users\\yyyy\\"
+	prefix := "C:\\Users\\yyyy"
 
 	// Remove the prefix from the path
 	trimmedPath := strings.TrimPrefix(dir, prefix)
@@ -66,12 +68,19 @@ func sysDetail() (string, string, error) {
 // func ViewCurrentDir() {
 
 // }
+const (
+// dir, _ = os.Getwd()
+)
 
 func main() {
 
+	green := color.New(color.FgGreen).SprintFunc()
+	Purple := color.New(color.FgMagenta).SprintFunc()
+	Yellow := color.New(color.FgYellow).SprintFunc()
+	dir, _ := os.Getwd()
 	reader := bufio.NewReader(os.Stdin)
-	hostname, username, err := sysDetail()
-	dir, err := DirPath()
+	hostname, username, _ := sysDetail()
+	dir_path, err := DirPath()
 
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -81,9 +90,8 @@ func main() {
 	for {
 
 		fmt.Println()
-		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY "+Yellow+"%s", hostname, username, dir)
-		fmt.Print(reset + "$")
-		fmt.Printf(reset)
+		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY "+Yellow+"~%s", hostname, username, dir_path)
+		fmt.Print(reset + " $ ")
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
@@ -93,7 +101,10 @@ func main() {
 		}
 
 		if input == "list" || input == "ls" {
-			files := getAllFilesAndDir()
+			files := listDirectory(dir)
+			for _, file := range files {
+				fmt.Print(file.Name() + "\t")
+			}
 		}
 
 		args := strings.Split(input, " ")
@@ -102,7 +113,15 @@ func main() {
 		cmd.Stdout = os.Stdout
 
 		if err := cmd.Run(); err != nil {
-			fmt.Println("Error:", err)
+			continue
 		}
 	}
+}
+
+func listDirectory(dirPath string) []os.DirEntry {
+	dir, err := os.ReadDir(dirPath)
+	if err != nil {
+		return nil
+	}
+	return dir
 }
