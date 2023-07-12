@@ -15,11 +15,14 @@ const (
 	Blue     = "\033[34m"
 	Purple   = "\033[35m"
 	green    = "\033[32m"
+	Yellow   = "\033[33m"
 	yellowBg = "\033[43m"
 	reset    = "\033[0m"
 )
 
 func DirPath() (string, error) {
+	//  return path to current working directory
+
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal("Error getting directory path: ", err)
@@ -33,7 +36,9 @@ func DirPath() (string, error) {
 }
 
 func sysDetail() (string, string, error) {
-	// Return User home directory and current directory of the user
+	// Return PC host name and  username and return LOGNAME if
+	// username is empty
+
 	hostname, err := os.Hostname()
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -66,6 +71,8 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 	hostname, username, err := sysDetail()
+	dir, err := DirPath()
+
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -74,15 +81,19 @@ func main() {
 	for {
 
 		fmt.Println()
-		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY ", hostname, username)
+		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY "+Yellow+"%s", hostname, username, dir)
 		fmt.Print(reset + "$")
-		// fmt.Printf(reset)
+		fmt.Printf(reset)
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
 		// Exit the shell if the user enters "exit" or "quit"
 		if input == "exit" || input == "quit" {
 			break
+		}
+
+		if input == "list" || input == "ls" {
+			files := getAllFilesAndDir()
 		}
 
 		args := strings.Split(input, " ")
