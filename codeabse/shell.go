@@ -14,6 +14,16 @@ import (
 	"strings"
 )
 
+const (
+	// red      = "\033[31m"
+	// Blue     = "\033[34m"
+	// Purple   = "\033[35m"
+	// green    = "\033[32m"
+	// Yellow   = "\033[33m"
+	// yellowBg = "\033[43m"
+	reset = "\033[0m"
+)
+
 func DirPath() (string, error) {
 	//  return path to current working directory
 
@@ -62,14 +72,6 @@ func sysDetail() (string, string, error) {
 // }
 const (
 	SHELL_NAME = "SHELLIFY"
-	reset      = "\033[0m"
-	green      = aurora.Green
-	Purple     = aurora.Magenta
-	Yellow     = aurora.Yellow
-	// green      = color.FgGreen.Render
-	// purple     = color.FgMagenta.Render
-	// yellow     = color.FgYellow.Render
-	// reset      = color.Reset
 )
 
 func main() {
@@ -78,6 +80,9 @@ func main() {
 	hostname, username, _ := sysDetail()
 	dir_path, err := DirPath()
 
+	green := aurora.Green
+	Purple := aurora.Magenta
+	Yellow := aurora.Yellow
 	// reset := aurora.Reset
 	if err != nil {
 		fmt.Println("Error:", err)
