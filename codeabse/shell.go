@@ -15,12 +15,6 @@ import (
 )
 
 const (
-	SHELL_NAME = "SHELLIFY"
-
-	green  = aurora.Green
-	Purple = aurora.Magenta
-	Yellow = aurora.Yellow
-	// reset := aurora.Reset
 	// red      = "\033[31m"
 	// Blue     = "\033[34m"
 	// Purple   = "\033[35m"
@@ -73,12 +67,23 @@ func sysDetail() (string, string, error) {
 
 }
 
+// func ViewCurrentDir() {
+
+// }
+const (
+	SHELL_NAME = "SHELLIFY"
+)
+
 func main() {
 	dir, _ := os.Getwd()
 	reader := bufio.NewReader(os.Stdin)
 	hostname, username, _ := sysDetail()
 	dir_path, err := DirPath()
 
+	green := aurora.Green
+	Purple := aurora.Magenta
+	Yellow := aurora.Yellow
+	// reset := aurora.Reset
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
