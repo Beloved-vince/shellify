@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 
+	"github.com/logrusorgru/aurora"
+
 	// "golang/package"
 	"log"
 	"os"
@@ -13,13 +15,19 @@ import (
 )
 
 const (
-	red      = "\033[31m"
-	Blue     = "\033[34m"
-	Purple   = "\033[35m"
-	green    = "\033[32m"
-	Yellow   = "\033[33m"
-	yellowBg = "\033[43m"
-	reset    = "\033[0m"
+	SHELL_NAME = "SHELLIFY"
+
+	green  = aurora.Green
+	Purple = aurora.Magenta
+	Yellow = aurora.Yellow
+	// reset := aurora.Reset
+	// red      = "\033[31m"
+	// Blue     = "\033[34m"
+	// Purple   = "\033[35m"
+	// green    = "\033[32m"
+	// Yellow   = "\033[33m"
+	// yellowBg = "\033[43m"
+	reset = "\033[0m"
 )
 
 func DirPath() (string, error) {
@@ -65,18 +73,7 @@ func sysDetail() (string, string, error) {
 
 }
 
-// func ViewCurrentDir() {
-
-// }
-const (
-// dir, _ = os.Getwd()
-)
-
 func main() {
-
-	green := color.New(color.FgGreen).SprintFunc()
-	Purple := color.New(color.FgMagenta).SprintFunc()
-	Yellow := color.New(color.FgYellow).SprintFunc()
 	dir, _ := os.Getwd()
 	reader := bufio.NewReader(os.Stdin)
 	hostname, username, _ := sysDetail()
@@ -90,7 +87,7 @@ func main() {
 	for {
 
 		fmt.Println()
-		fmt.Printf(green+"%s@%s "+Purple+"SHELLIFY "+Yellow+"~%s", hostname, username, dir_path)
+		fmt.Print(aurora.Sprintf("%s%s%s %s %s", green(hostname), green("@"), green(username), Purple(SHELL_NAME), Yellow("~"+dir_path)))
 		fmt.Print(reset + " $ ")
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
